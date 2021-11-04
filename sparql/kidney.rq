@@ -1,0 +1,240 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+PREFIX UBERON: <http://purl.obolibrary.org/obo/UBERON_>
+PREFIX CL: <http://purl.obolibrary.org/obo/CL_>
+PREFIX part_of: <http://purl.obolibrary.org/obo/BFO_0000050>
+PREFIX overlaps: <http://purl.obolibrary.org/obo/RO_0002131>
+PREFIX connected_to: <http://purl.obolibrary.org/obo/RO_0002170>
+PREFIX develops_from: <http://purl.obolibrary.org/obo/RO_0002202>
+ 
+SELECT ?s (MIN(?s_label) AS ?slabel) ?p (MIN(?p_label) AS ?plabel) ?o (MIN(?o_label) AS ?olabel)
+WHERE {
+  VALUES ?s 
+  { 
+    CL:1001096
+    UBERON:0004100
+    UBERON:0005272
+    UBERON:0001289
+    CL:0000097
+    UBERON:0002113
+    UBERON:0001986
+    UBERON:0004188
+    UBERON:0004640
+    CL:1001285
+    UBERON:0004639
+    UBERON:0001290 
+    UBERON:0000362 
+    UBERON:0004205 
+    CL:1001033 
+    UBERON:0005215 
+    UBERON:0004201 
+    UBERON:0005097 
+    CL:1001106 
+    CL:0000648 
+    CL:0000576 
+    CL:1000716 
+    UBERON:0006544 
+    UBERON:0002320 
+    UBERON:0004294 
+    UBERON:0004204 
+    CL:1000768 
+    CL:1000698 
+    UBERON:0001226 
+    UBERON:0001285 
+    CL:1001099 
+    CL:1000452 
+    UBERON:0002189 
+    CL:1001432 
+    UBERON:0005750 
+    UBERON:0001231 
+    UBERON:0004200 
+    CL:0001056 
+    UBERON:0001284 
+    UBERON:0005096 
+    UBERON:0001292 
+    CL:0000990 
+    UBERON:0009095 
+    UBERON:0002319 
+    CL:0000084 
+    CL:1000849 
+    CL:1000717 
+    UBERON:0006852 
+    UBERON:0001232 
+    CL:1000692 
+    CL:1000718 
+    UBERON:0009202 
+    CL:1000742 
+    UBERON:0005271 
+    CL:0000786 
+    UBERON:0009091 
+    UBERON:0004196 
+    CL:1001111 
+    CL:1000454 
+    UBERON:0001294 
+    UBERON:0004193 
+    CL:0002138 
+    CL:1000850 
+    CL:0002306 
+    CL:0000623 
+    CL:1001131 
+    CL:1000714 
+    UBERON:0001224 
+    CL:1001318 
+    UBERON:0002015 
+    CL:1001108 
+    CL:1001107 
+    UBERON:0004202 
+    UBERON:0001291 
+    UBERON:0008716 
+    UBERON:0012441 
+    CL:0000910 
+    CL:1000691 
+    UBERON:0009883 
+    UBERON:0004203 
+    UBERON:0006517 
+    UBERON:0002042 
+    UBERON:0001228 
+    CL:0000236 
+    CL:0000875 
+    UBERON:0004190 
+    CL:0000775 
+    CL:1000715 
+    CL:0000115 
+    UBERON:0001229 
+    UBERON:0004134 
+    CL:1001005 
+    UBERON:0001225 
+    UBERON:0001227 
+    CL:1001431 
+    CL:0000814 
+    UBERON:0004197 
+    CL:0001058 
+    CL:1001109 
+    UBERON:0014464 
+    CL:0000653 
+  }
+  VALUES ?o 
+  { 
+    CL:1001096
+    UBERON:0004100
+    UBERON:0005272
+    UBERON:0001289
+    CL:0000097
+    UBERON:0002113
+    UBERON:0001986
+    UBERON:0004188
+    UBERON:0004640
+    CL:1001285
+    UBERON:0004639
+    UBERON:0001290 
+    UBERON:0000362 
+    UBERON:0004205 
+    CL:1001033 
+    UBERON:0005215 
+    UBERON:0004201 
+    UBERON:0005097 
+    CL:1001106 
+    CL:0000648 
+    CL:0000576 
+    CL:1000716 
+    UBERON:0006544 
+    UBERON:0002320 
+    UBERON:0004294 
+    UBERON:0004204 
+    CL:1000768 
+    CL:1000698 
+    UBERON:0001226 
+    UBERON:0001285 
+    CL:1001099 
+    CL:1000452 
+    UBERON:0002189 
+    CL:1001432 
+    UBERON:0005750 
+    UBERON:0001231 
+    UBERON:0004200 
+    CL:0001056 
+    UBERON:0001284 
+    UBERON:0005096 
+    UBERON:0001292 
+    CL:0000990 
+    UBERON:0009095 
+    UBERON:0002319 
+    CL:0000084 
+    CL:1000849 
+    CL:1000717 
+    UBERON:0006852 
+    UBERON:0001232 
+    CL:1000692 
+    CL:1000718 
+    UBERON:0009202 
+    CL:1000742 
+    UBERON:0005271 
+    CL:0000786 
+    UBERON:0009091 
+    UBERON:0004196 
+    CL:1001111 
+    CL:1000454 
+    UBERON:0001294 
+    UBERON:0004193 
+    CL:0002138 
+    CL:1000850 
+    CL:0002306 
+    CL:0000623 
+    CL:1001131 
+    CL:1000714 
+    UBERON:0001224 
+    CL:1001318 
+    UBERON:0002015 
+    CL:1001108 
+    CL:1001107 
+    UBERON:0004202 
+    UBERON:0001291 
+    UBERON:0008716 
+    UBERON:0012441 
+    CL:0000910 
+    CL:1000691 
+    UBERON:0009883 
+    UBERON:0004203 
+    UBERON:0006517 
+    UBERON:0002042 
+    UBERON:0001228 
+    CL:0000236 
+    CL:0000875 
+    UBERON:0004190 
+    CL:0000775 
+    CL:1000715 
+    CL:0000115 
+    UBERON:0001229 
+    UBERON:0004134 
+    CL:1001005 
+    UBERON:0001225 
+    UBERON:0001227 
+    CL:1001431 
+    CL:0000814 
+    UBERON:0004197 
+    CL:0001058 
+    CL:1001109 
+    UBERON:0014464 
+    CL:0000653 
+  }
+  # this hint is required for Blazegraph to run this query efficiently
+  hint:Prior hint:runFirst true .
+  GRAPH <http://reasoner.renci.org/nonredundant> {
+    ?s ?p ?o .
+    FILTER(?s != ?o)
+  }
+  ?s rdfs:label ?s_label .
+  { VALUES ?p
+    { 
+      rdfs:subClassOf
+      part_of: 
+      overlaps: 
+      connected_to:
+      develops_from: 
+    } 
+    ?p rdfs:label ?p_label . 
+  }
+  ?o rdfs:label ?o_label .
+}
+GROUP BY ?s ?p ?o
+
