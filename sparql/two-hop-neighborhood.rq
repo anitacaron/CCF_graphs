@@ -1,0 +1,60 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+# specify focus node here
+PREFIX node: <http://purl.obolibrary.org/obo/UBERON_0001463> 
+SELECT ?s (MIN(?s_label) AS ?slabel) ?p (MIN(?p_label) AS ?plabel) ?o (MIN(?o_label) AS ?olabel)
+WHERE {
+  {
+    SELECT DISTINCT ?o
+    WHERE {
+      GRAPH <http://reasoner.renci.org/nonredundant> {
+        VALUES ?s { node: }
+        ?s ?p ?o .
+      }
+    }
+  }
+  UNION
+  {
+    SELECT DISTINCT ?o
+    WHERE {
+      GRAPH <http://reasoner.renci.org/nonredundant> {
+      VALUES ?term { node: }
+      ?term ?p1 ?o1 .
+      ?o1 ?p2 ?o .
+      }
+    }
+  }
+  UNION { VALUES ?o { node: } }
+
+  {
+    SELECT DISTINCT ?s
+    WHERE {
+      GRAPH <http://reasoner.renci.org/nonredundant> {
+        VALUES ?o { node: }
+        ?o ?p ?s .
+      }
+    }
+  }
+  UNION
+  {
+    SELECT DISTINCT ?s
+    WHERE {
+      GRAPH <http://reasoner.renci.org/nonredundant> {
+      VALUES ?term { node: }
+      ?term ?p1 ?o1 .
+      ?o1 ?p2 ?s .
+      }
+    }
+  }
+  UNION { VALUES ?s { node: } }
+  # this hint is required for Blazegraph to run this query efficiently
+  hint:Prior hint:runFirst true .
+  GRAPH <http://reasoner.renci.org/nonredundant> {
+    ?s ?p ?o .
+    FILTER(?s != ?o)
+  }
+  ?s rdfs:label ?s_label .
+  { ?p rdfs:label ?p_label . } UNION { VALUES ( ?p ?p_label ) { ( rdfs:subClassOf "subClassOf" ) } }
+  ?o rdfs:label ?o_label .
+}
+GROUP BY ?s ?p ?o
