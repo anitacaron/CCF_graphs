@@ -1,0 +1,109 @@
+PREFIX part: <http://purl.org/vocab/participation/schema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX connected_to: <http://purl.obolibrary.org/obo/RO_0002170>
+PREFIX part_of: <http://purl.obolibrary.org/obo/BFO_0000050>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+# specify focus node here
+PREFIX node: <http://purl.obolibrary.org/obo/UBERON_0000074> 
+SELECT ?s (MIN(?s_label) AS ?slabel) ?p (MIN(?p_label) AS ?plabel) ?o (MIN(?o_label) AS ?olabel)
+WITH {
+SELECT ?s WHERE {
+{
+    SELECT DISTINCT ?s
+    WHERE {
+      GRAPH <http://reasoner.renci.org/nonredundant> {
+        ?s ?p node: .
+       FILTER EXISTS {
+          GRAPH <http://reasoner.renci.org/ontology> {
+              VALUES ?p_p { connected_to: part_of: rdfs:subClassOf }
+              ?p rdfs:subPropertyOf* ?p_p .
+            }
+        }
+      }
+    }
+  }
+  UNION
+  {
+    SELECT DISTINCT ?s
+    WHERE {
+      GRAPH <http://reasoner.renci.org/nonredundant> {
+        ?s ?p1 ?o1 .
+        ?o1 ?p2 node: .
+        FILTER EXISTS {
+          GRAPH <http://reasoner.renci.org/ontology> {
+              VALUES ?p1_p { connected_to: part_of: rdfs:subClassOf }
+              ?p1 rdfs:subPropertyOf* ?p1_p .
+            }
+        }
+        FILTER EXISTS {
+          GRAPH <http://reasoner.renci.org/ontology> {
+              VALUES ?p2_p { connected_to: part_of: rdfs:subClassOf }
+              ?p2 rdfs:subPropertyOf* ?p2_p .
+            }
+        }
+      }
+    }
+  }
+  UNION
+  {
+    SELECT DISTINCT ?s
+    WHERE {
+      GRAPH <http://reasoner.renci.org/nonredundant> {
+        ?s ?p1 ?o1 .
+        ?o1 ?p2 ?o2 .
+        ?o2 ?p3 node: .
+        FILTER EXISTS {
+          GRAPH <http://reasoner.renci.org/ontology> {
+              VALUES ?p1_p { connected_to: part_of: rdfs:subClassOf }
+              ?p1 rdfs:subPropertyOf* ?p1_p .
+            }
+        }
+        FILTER EXISTS {
+          GRAPH <http://reasoner.renci.org/ontology> {
+              VALUES ?p2_p { connected_to: part_of: rdfs:subClassOf }
+              ?p2 rdfs:subPropertyOf* ?p2_p .
+            }
+        }
+        FILTER EXISTS {
+          GRAPH <http://reasoner.renci.org/ontology> {
+              VALUES ?p3_p { connected_to: part_of: rdfs:subClassOf }
+              ?p3 rdfs:subPropertyOf* ?p3_p .
+            }
+        }
+      }
+    }
+  }
+  UNION 
+  {
+    VALUES ?s { node: } 
+  }
+}
+} AS %NODES
+WHERE {
+{
+INCLUDE %NODES
+}  
+{
+SELECT (?s AS ?o) WHERE { INCLUDE %NODES }
+}
+
+  # this hint is required for Blazegraph to run this query efficiently
+  hint:Prior hint:runFirst true .
+ 
+  GRAPH <http://reasoner.renci.org/nonredundant> {
+      ?s ?p ?o .
+      FILTER EXISTS {
+          GRAPH <http://reasoner.renci.org/ontology> {
+              VALUES ?p_p { connected_to: part_of: rdfs:subClassOf }
+              ?p rdfs:subPropertyOf* ?p_p .
+            }
+      }
+  }
+  {
+  ?s rdfs:label ?s_label .
+  { ?p rdfs:label ?p_label . } UNION { VALUES (?p ?p_label) { (rdfs:subClassOf "rdfs:subClassOf") } }
+  ?o rdfs:label ?o_label .
+  }
+  hint:Prior hint:runLast true .
+}
+GROUP BY ?s ?p ?o

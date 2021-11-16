@@ -6,7 +6,7 @@
 
 UBERGRAPH="https://stars-app.renci.org/ubergraph/sparql"
 
-all: kidney-three-hop-neighborhood.png
+all: kidney-three-hop-neighborhood-inside.png
 
 %.result.json: sparql/%.rq
 	 curl -X POST --data-binary @$< --header "Content-Type:application/sparql-query" --header "Accept:application/json" $(UBERGRAPH) >$@
