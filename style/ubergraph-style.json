@@ -75,6 +75,14 @@
             "properties": {
                 "fillcolor": "blue"
             }
-        }
+        },
+        {
+          "conditions": {
+              "subset":"HubMAP_ASCT"
+          },
+          "properties": {
+              "fillcolor": "green"
+          }
+      }
     ]
 }
