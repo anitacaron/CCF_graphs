@@ -7,8 +7,14 @@
 UBERGRAPH="https://stars-app.renci.org/ubergraph/sparql"
 
 ROBOT = robot
+NODE_ROOT = "UBERON_0002113"
+PROPERTIES = ["RO_0002170", "BFO_0000050"]
+DEPTH = 3
 
 all: Kidney.png Kidney.pdf
+
+sparql/%.rq:
+	python generate_rq.py '{"node_root": $(NODE_ROOT), "properties": $(PROPERTIES)}' $@
 
 %.result.json: sparql/%.rq
 	 curl -X POST --data-binary @$< --header "Content-Type:application/sparql-query" --header "Accept:application/json" $(UBERGRAPH) >$@
