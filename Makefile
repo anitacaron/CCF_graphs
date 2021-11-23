@@ -10,6 +10,7 @@ ROBOT = robot
 NODE_ROOT = "UBERON_0002113"
 PROPERTIES = "<http://purl.obolibrary.org/obo/RO_0002170> <http://purl.obolibrary.org/obo/BFO_0000050>"
 DEPTH = 3
+SUBSET = subset/Kidney_ASCTB_subset.json
 
 all: Kidney.png Kidney.pdf
 
@@ -22,7 +23,7 @@ sparql/%.rq:
 %.obograph_p.json: %.result.json
 	jq '.results | {graphs: [{ nodes: .bindings | map({id: .s.value, lbl: .slabel.value, type: "CLASS"}, {id: .p.value, lbl: .plabel.value, type: "PROPERTY"}, {id: .o.value, lbl: .olabel.value, type: "CLASS"}) | unique , edges: .bindings | map(. | { sub: .s.value, pred: .p.value, obj: .o.value }) } ]}' $< >$@
 
-%.obograph.json: %.obograph_p.json subset/%_ASCTB_subset.json
+%.obograph.json: %.obograph_p.json $(SUBSET)
 	python merge_json.py $^ $@
 
 %.dot: %.obograph.json style/ubergraph-style.json
