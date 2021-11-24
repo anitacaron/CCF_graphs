@@ -1,0 +1,56 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+# specify focus node here
+PREFIX node: <http://purl.obolibrary.org/obo/{node_root}> 
+SELECT ?s (MIN(?s_label) AS ?slabel) ?p (MIN(?p_label) AS ?plabel) ?o (MIN(?o_label) AS ?olabel)
+WITH {{
+SELECT ?s WHERE {{
+{{
+    SELECT DISTINCT ?s
+    WHERE {{
+      GRAPH <http://reasoner.renci.org/nonredundant> {{
+        ?s ?p node: .
+       FILTER EXISTS {{
+          GRAPH <http://reasoner.renci.org/ontology> {{
+              VALUES ?p_p {{ {properties} rdfs:subClassOf }}
+              ?p rdfs:subPropertyOf* ?p_p .
+            }}
+        }}
+      }}
+    }}
+  }}
+  {depths}
+  UNION 
+  {{
+    VALUES ?s {{ node: }} 
+  }}
+}}
+}} AS %NODES
+WHERE {{
+{{
+INCLUDE %NODES
+}}  
+{{
+SELECT (?s AS ?o) WHERE {{ INCLUDE %NODES }}
+}}
+
+  # this hint is required for Blazegraph to run this query efficiently
+  hint:Prior hint:runFirst true .
+ 
+  GRAPH <http://reasoner.renci.org/nonredundant> {{
+      ?s ?p ?o .
+      FILTER EXISTS {{
+          GRAPH <http://reasoner.renci.org/ontology> {{
+              VALUES ?p_p {{ {properties} rdfs:subClassOf }}
+              ?p rdfs:subPropertyOf* ?p_p .
+            }}
+      }}
+  }}
+  {{
+  ?s rdfs:label ?s_label .
+  {{ ?p rdfs:label ?p_label . }} UNION {{ VALUES (?p ?p_label) {{ (rdfs:subClassOf "rdfs:subClassOf") }} }}
+  ?o rdfs:label ?o_label .
+  }}
+  hint:Prior hint:runLast true .
+}}
+GROUP BY ?s ?p ?o
