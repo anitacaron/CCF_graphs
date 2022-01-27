@@ -26,11 +26,13 @@ sparql/%.rq:
 %.obograph.json: %.obograph_p.json $(SUBSET)
 	python merge_json.py $^ $@
 
-%.dot: %.obograph.json style/ubergraph-style.json
+dot/%.dot: %.obograph.json style/ubergraph-style.json
 	og2dot.js -s style/ubergraph-style.json $< >$@
 
-%.png: %.dot
+.PRECIOUS: dot/%.dot
+
+%.png: dot/%.dot
 	dot $< -Tpng -Grankdir=LR >$@
 
-%.pdf: %.dot
+%.pdf: dot/%.dot
 	dot $< -Tpdf -Grankdir=LR >$@
