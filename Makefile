@@ -4,7 +4,7 @@
 # jq: https://stedolan.github.io/jq/
 # curl
 
-UBERGRAPH="https://stars-app.renci.org/ubergraph/sparql"
+UBERGRAPH="https://ubergraph.apps.renci.org/sparql"
 
 ROBOT = robot
 NODE_ROOT = "UBERON_0002113"
