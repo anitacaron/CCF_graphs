@@ -78,7 +78,7 @@
         },
         {
           "conditions": {
-              "subset":"HubMAP_ASCT"
+              "subset":"human_reference_atlas"
           },
           "properties": {
               "fillcolor": "green"
