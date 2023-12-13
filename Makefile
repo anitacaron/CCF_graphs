@@ -8,11 +8,15 @@ UBERGRAPH="https://ubergraph.apps.renci.org/sparql"
 
 ROBOT = robot
 NODE_ROOT = "UBERON_0002113"
-PROPERTIES = "<http://purl.obolibrary.org/obo/RO_0002170> <http://purl.obolibrary.org/obo/BFO_0000050>"
+PROPERTIES = "<http://purl.obolibrary.org/obo/RO_0002170> <http://purl.obolibrary.org/obo/BFO_0000050> <http://purl.obolibrary.org/obo/BFO_0000051>"
 DEPTH = 3
-SUBSET = subset/Kidney_ASCTB_subset.json
+SUBSET = Kidney_ASCTB_subset.json
 
 all: Kidney.png Kidney.pdf
+
+subset/$(SUBSET):
+	curl https://raw.githubusercontent.com/hubmapconsortium/ccf-validation-tools/master/owl/$(SUBSET) > $@ 
+
 
 sparql/%.rq:
 	python generate_rq.py '{"node_root": $(NODE_ROOT), "properties": $(PROPERTIES), "depth": $(DEPTH)}' $@
@@ -29,7 +33,7 @@ sparql/%.rq:
 dot/%.dot: %.obograph.json style/ubergraph-style.json
 	og2dot.js -s style/ubergraph-style.json $< >$@
 
-.PRECIOUS: dot/%.dot
+# .PRECIOUS: dot/%.dot
 
 %.png: dot/%.dot
 	dot $< -Tpng -Grankdir=LR >$@
