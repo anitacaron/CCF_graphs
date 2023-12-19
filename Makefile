@@ -7,12 +7,12 @@
 UBERGRAPH="https://ubergraph.apps.renci.org/sparql"
 
 ROBOT = robot
-NODE_ROOT = "UBERON_0002113"
-PROPERTIES = "<http://purl.obolibrary.org/obo/RO_0002170> <http://purl.obolibrary.org/obo/BFO_0000050> <http://purl.obolibrary.org/obo/BFO_0000051>"
+NODE_ROOT = "UBERON_0001229"
+PROPERTIES = "<http://purl.obolibrary.org/obo/BFO_0000050> <http://purl.obolibrary.org/obo/BFO_0000051>"
 DEPTH = 3
 SUBSET = Kidney_ASCTB_subset.json
 
-all: Kidney.png Kidney.pdf
+all: renal-corpsule.png renal-corpsule.pdf
 
 subset/$(SUBSET):
 	curl https://raw.githubusercontent.com/hubmapconsortium/ccf-validation-tools/master/owl/$(SUBSET) > $@ 
@@ -27,7 +27,7 @@ sparql/%.rq:
 %.obograph_p.json: %.result.json
 	jq '.results | {graphs: [{ nodes: .bindings | map({id: .s.value, lbl: .slabel.value, type: "CLASS"}, {id: .p.value, lbl: .plabel.value, type: "PROPERTY"}, {id: .o.value, lbl: .olabel.value, type: "CLASS"}) | unique , edges: .bindings | map(. | { sub: .s.value, pred: .p.value, obj: .o.value }) } ]}' $< >$@
 
-%.obograph.json: %.obograph_p.json $(SUBSET)
+%.obograph.json: %.obograph_p.json subset/$(SUBSET)
 	python merge_json.py $^ $@
 
 dot/%.dot: %.obograph.json style/ubergraph-style.json
