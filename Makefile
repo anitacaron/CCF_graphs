@@ -7,7 +7,7 @@
 UBERGRAPH="https://ubergraph.apps.renci.org/sparql"
 
 ROBOT = robot
-NODE_ROOT = "UBERON_0001229"
+NODE_ROOT = "UBERON_0002113"
 PROPERTIES = "<http://purl.obolibrary.org/obo/BFO_0000050> <http://purl.obolibrary.org/obo/BFO_0000051>"
 DEPTH = 3
 SUBSET = Kidney_ASCTB_subset.json
